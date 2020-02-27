@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.PostConstruct;
-import com.rpn.operation.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -14,7 +13,7 @@ public class Operations {
   @Autowired
   private List<Operation> operations;
 
-  private final Map<String, Operation> operationMap = new HashMap<String, Operation>();
+  private final Map<String, Operation> operationMap = new HashMap<>();
 
   @PostConstruct
   private void initOperations() {

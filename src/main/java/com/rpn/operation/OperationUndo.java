@@ -1,30 +1,31 @@
 package com.rpn.operation;
 
-import com.rpn.utils.OperationValues;
+import com.rpn.model.NumberTreeNode;
 import java.util.Stack;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class OperationUndo implements Operation {
 
-  @Override
+  @Autowired
+  private OperationProperties operationProperties;
+
   public String getValue() {
-    return OperationValues.UNDO;
+    return operationProperties.UNDO;
   }
 
   @Override
-  public boolean calculate(Stack<String> stack, Stack<String> historyStack) {
-    if (historyStack.size() <= 0) {
+  public boolean calculate(Stack<NumberTreeNode> stack) {
+    if (stack.size() <= 0) {
       return false;
     }
-    String history = historyStack.pop();
-    String[] commands = history.split(" ");
-    for (String command : commands) {
-      if (command.equalsIgnoreCase(OperationValues.POP)) {
-        stack.pop();
-      } else {
-        stack.push(command);
-      }
+    NumberTreeNode num = stack.pop();
+    if (num.getFirst() != null) {
+      stack.push(num.getFirst());
+    }
+    if (num.getSecond() != null) {
+      stack.push(num.getSecond());
     }
     return true;
   }

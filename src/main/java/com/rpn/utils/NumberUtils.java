@@ -15,13 +15,4 @@ public class NumberUtils {
   public static boolean isNumber(String string) {
     return org.apache.commons.lang3.math.NumberUtils.isCreatable(string);
   }
-
-  public static String generateHistoryString(double num1) {
-    return OperationValues.POP + " " + NumberUtils.numberToString(num1);
-  }
-
-  public static String generateHistoryString(double num1, double num2) {
-    return OperationValues.POP + " " + NumberUtils.numberToString(num1)
-        + " " + NumberUtils.numberToString(num2);
-  }
 }

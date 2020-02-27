@@ -1,12 +1,11 @@
 package com.rpn;
 
 import com.rpn.model.Command;
-import com.rpn.model.HistoryStack;
 import com.rpn.model.NumberStack;
+import com.rpn.model.NumberTreeNode;
 import com.rpn.operation.Operations;
 import com.rpn.operation.Operation;
 import com.rpn.utils.NumberUtils;
-import com.rpn.utils.OperationValues;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,8 +19,6 @@ public class CalculationServiceImpl implements CalculationService {
   private Operations operations;
   @Autowired
   private NumberStack stack;
-  @Autowired
-  private HistoryStack historyStack;
 
   @Autowired
   public CalculationServiceImpl() {}
@@ -42,11 +39,10 @@ public class CalculationServiceImpl implements CalculationService {
     for (Command command : commands) {
       String commandString = command.getCommand();
       if (NumberUtils.isNumber(commandString)) {
-        stack.push(commandString);
-        historyStack.push(OperationValues.POP);
+        stack.push(new NumberTreeNode(Double.parseDouble(commandString)));
       } else {
         Operation operation = operations.getOperation(commandString);
-        boolean succeed = operation.calculate(stack, historyStack);
+        boolean succeed = operation.calculate(stack);
         if (!succeed) {
           System.out.println("operator " + commandString + " (position: " + command.getPosition()
               + "): insucient parameters");
@@ -60,8 +56,8 @@ public class CalculationServiceImpl implements CalculationService {
   public String output() {
     StringBuilder result = new StringBuilder();
     result.append("stack: ");
-    for (String s : stack) {
-      result.append(s).append(" ");
+    for (NumberTreeNode n : stack) {
+      result.append(NumberUtils.numberToString(n.getValue())).append(" ");
     }
     return result.toString().trim();
   }
